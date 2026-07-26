@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# Model weights are multi-GB binaries — never commit these.
+# See docs/models.md for where to download them instead.
+*.gguf
+models/

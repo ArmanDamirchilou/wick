@@ -1,0 +1,28 @@
+[project]
+name = "wick"
+version = "0.1.0"
+description = "An offline AI assistant that answers questions from local documents, no internet required."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Arman Damirchilou" }]
+dependencies = [
+    "pypdf>=4.0",
+    "faiss-cpu>=1.8",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+embeddings = ["sentence-transformers>=3.0"]
+llm = ["llama-cpp-python>=0.2"]
+dev = ["pytest>=8.0", "ruff>=0.5"]
+
+[project.scripts]
+wick = "wick.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 100
