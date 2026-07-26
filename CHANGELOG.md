@@ -7,6 +7,8 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
+### Added
+
 ## [0.1.0] - 2026-07-26
 
 ### Added
