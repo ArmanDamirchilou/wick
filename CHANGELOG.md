@@ -8,6 +8,12 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 ## [Unreleased]
 
 ### Added
+- Clear error message when the `--model` path doesn't point at a real file.
+
+### Changed
+- Answers are generated through each model's own chat template (llama.cpp chat
+  completion) instead of a hand-written prompt with a hardcoded `</s>` stop
+  token, so Gemma, Qwen, Phi, and Llama GGUFs all format correctly.
 
 ## [0.1.0] - 2026-07-26
 
