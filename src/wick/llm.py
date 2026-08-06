@@ -1,5 +1,7 @@
 from pathlib import Path
 
+REFUSAL = "I don't know based on this document."
+
 
 class LocalLLM:
     """Point this at any GGUF model file on disk — Gemma, Phi, Qwen, Llama all work."""
@@ -24,14 +26,12 @@ class LocalLLM:
         )
         return out["choices"][0]["message"]["content"].strip()
 
-    REFUSAL = "I don't know based on this document."
-
-    @classmethod
-    def _build_prompt(cls, question: str, context: list[str]) -> str:
+    @staticmethod
+    def _build_prompt(question: str, context: list[str]) -> str:
         joined = "\n\n".join(context) if context else "(no relevant context found)"
         return (
             "Use only the context below to answer the question. "
-            f'If the answer is not in the context, reply exactly: "{cls.REFUSAL}" '
+            f'If the answer is not in the context, reply exactly: "{REFUSAL}" '
             "Do not use any outside knowledge. Reply in the same language as the question.\n\n"
             f"Context:\n{joined}\n\n"
             f"Question: {question}\n\n"

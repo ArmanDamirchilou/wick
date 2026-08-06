@@ -2,7 +2,7 @@ from pathlib import Path
 
 from .embeddings import Embedder, SentenceTransformerEmbedder
 from .ingest import chunk_text, extract_text
-from .llm import LocalLLM
+from .llm import REFUSAL, LocalLLM
 from .store import VectorStore
 
 
@@ -35,5 +35,5 @@ class OfflineAssistant:
         # Nothing cleared the relevance bar — refuse instead of letting a weak
         # model answer from its own training data.
         if not context:
-            return LocalLLM.REFUSAL
+            return REFUSAL
         return self.llm.answer(question, context)
