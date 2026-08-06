@@ -9,6 +9,9 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ### Added
 - Clear error message when the `--model` path doesn't point at a real file.
+- Explicit errors for a missing PDF, a corrupt/non-PDF file, and a scanned or
+  image-only PDF with no extractable text (instead of silently producing an
+  empty index).
 
 ### Changed
 - Answers are generated through each model's own chat template (llama.cpp chat
