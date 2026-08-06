@@ -25,6 +25,23 @@ pip install -e ".[embeddings,llm]"
 and a local GGUF model file (see `docs/models.md` for recommendations and
 download links).
 
+### Integration test
+
+The default `pytest` run is fully mocked and needs no model or network. A
+separate end-to-end test (marked `integration`) runs a real GGUF model over a
+sample PDF and is deselected by default — including in CI. To run it, point
+`WICK_TEST_MODEL` at a local model and select the marker:
+
+```bash
+WICK_TEST_MODEL=./models/your-model.gguf pytest -m integration
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:WICK_TEST_MODEL = ".\models\your-model.gguf"; pytest -m integration
+```
+
 ## Workflow
 
 1. Open an issue first for anything beyond a small fix, so we can agree on

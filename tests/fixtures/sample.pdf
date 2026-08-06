@@ -1,0 +1,94 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 1741 >>
+stream
+BT
+/F1 14 Tf
+16 TL
+72 720 Td
+(Solar Field Report: Station Meridian-7) Tj
+T*
+T*
+(Section 1 - Power Generation.) Tj
+T*
+(The primary generator at Station Meridian-7 produces 3.5 kilowatts) Tj
+T*
+(of continuous power under full sunlight. Output is measured at the) Tj
+T*
+(main bus and logged every fifteen minutes by the telemetry unit.) Tj
+T*
+(Peak generation occurs between 10:00 and 14:00 local time, when the) Tj
+T*
+(panel array is closest to perpendicular with the incident sunlight.) Tj
+T*
+T*
+(Section 2 - Energy Storage.) Tj
+T*
+(The backup battery bank stores 12 kilowatt-hours and was installed) Tj
+T*
+(in March 2021 by the maintenance crew led by Dr. Farah Nazari.) Tj
+T*
+(The bank uses lithium iron phosphate cells rated for 6000 cycles,) Tj
+T*
+(chosen over lead-acid for their tolerance of deep discharge in the) Tj
+T*
+(high daytime temperatures the station regularly experiences.) Tj
+T*
+T*
+(Section 3 - Water Purification.) Tj
+T*
+(Water purification runs on the surplus load and processes up to) Tj
+T*
+(400 liters of drinking water per day through a two-stage reverse) Tj
+T*
+(osmosis membrane. The pre-filter is replaced every ninety days,) Tj
+T*
+(and the crew keeps three spare membranes in the supply locker.) Tj
+T*
+T*
+(Section 4 - Logistics.) Tj
+T*
+(The nearest resupply depot is 84 kilometers to the north, reachable) Tj
+T*
+(only during the dry season between May and September. Outside that) Tj
+T*
+(window the access road floods and deliveries are suspended.) Tj
+T*
+T*
+(Section 5 - Emergency Protocol.) Tj
+T*
+(If generator output drops below 1 kilowatt, switch to battery-only) Tj
+T*
+(mode and radio the depot on channel 9. Do not attempt repairs on) Tj
+T*
+(the array during a dust storm; wait until visibility clears.) Tj
+T*
+ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000317 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2110
+%%EOF
