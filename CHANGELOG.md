@@ -12,11 +12,19 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 - Explicit errors for a missing PDF, a corrupt/non-PDF file, and a scanned or
   image-only PDF with no extractable text (instead of silently producing an
   empty index).
+- `--embed-model` flag to choose the sentence-transformers retrieval model —
+  point it at a multilingual encoder for non-English (e.g. Persian) PDFs.
+- Retrieval relevance gate: a question whose best-matching chunk scores below a
+  similarity threshold is answered "I don't know based on this document."
+  rather than handed to the model, so a weak local model can't quietly answer
+  out-of-context questions from its own training data.
 
 ### Changed
 - Answers are generated through each model's own chat template (llama.cpp chat
   completion) instead of a hand-written prompt with a hardcoded `</s>` stop
   token, so Gemma, Qwen, Phi, and Llama GGUFs all format correctly.
+- The CLI reports failures as a single `error: ...` line and exits non-zero
+  instead of printing a traceback.
 
 ## [0.1.0] - 2026-07-26
 
