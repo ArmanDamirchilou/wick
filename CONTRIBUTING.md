@@ -6,7 +6,7 @@ to shape it. This doc covers how to get set up and how changes get merged.
 ## Getting set up
 
 ```bash
-git clone https://github.com/<your-username>/wick.git
+git clone https://github.com/armandamirchilou/wick.git
 cd wick
 pip install -e ".[dev]"
 pytest

@@ -22,3 +22,18 @@ Always grab the `Q4_K_M` or `Q5_K_M` quantization unless you've confirmed the
 target hardware can handle more — those cut file size roughly 60–75% with
 only a small quality hit, which is usually the difference between "runs on
 a six-year-old laptop" and "doesn't."
+
+## Non-English documents
+
+The `--model` above is the language model that writes the answer. Retrieval —
+finding the right passage to answer from — is a *separate* model, and the
+default (`all-MiniLM-L6-v2`) only handles English. For a non-English PDF, pass a
+multilingual retrieval model as well:
+
+```bash
+wick chapter.pdf "این فصل درباره چیست؟" --model ./models/gemma-3n-e2b-q4_k_m.gguf \
+  --embed-model paraphrase-multilingual-MiniLM-L12-v2
+```
+
+Pair it with a multilingual language model — Gemma 3n is a good pick (see the
+table above). This path is tested end to end on Persian.

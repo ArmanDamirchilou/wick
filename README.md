@@ -4,11 +4,7 @@
 
 An offline AI assistant that answers questions from local documents, no internet connection required.
 
-<!-- TODO before shipping: replace with a real screenshot or short GIF of the CLI in action -->
-<!-- TODO before shipping: replace with your live demo link once deployed -->
-**[Try it →](#)**
-
-![CI](https://github.com/<your-username>/wick/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml/badge.svg)
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)
 
@@ -22,21 +18,61 @@ no dependency on a network that might not be there when it matters most.
 
 ## Quick start
 
+Install the retrieval backend, then a prebuilt CPU build of the model runtime:
+
 ```bash
-pip install -e ".[embeddings,llm]"
+pip install -e ".[embeddings]"
+pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
 ```
 
-Download a local model (see [`docs/models.md`](docs/models.md) for picks
-suited to weak hardware), then:
+The second line grabs a prebuilt `llama-cpp-python` wheel, so you don't need a
+C++ compiler (this is also the reliable path on Windows). If you have a
+toolchain and would rather build from source, `pip install -e ".[embeddings,llm]"`
+works too.
+
+Download a local model (see [`docs/models.md`](docs/models.md) for picks suited
+to weak hardware), then ask a question:
 
 ```bash
-wick document.pdf "Explain chapter 3" --model ./models/your-model.gguf
+wick examples/earthquake-safety.pdf "What should I do during the shaking?" --model ./models/your-model.gguf
+```
+
+For a non-English document, add a multilingual retrieval model so the search
+step understands the language:
+
+```bash
+wick chapter.pdf "این فصل درباره چیست؟" --model ./models/your-model.gguf --embed-model paraphrase-multilingual-MiniLM-L12-v2
+```
+
+## Example
+
+Real output, using the bundled example guide and a Gemma 3n model:
+
+```
+$ wick examples/earthquake-safety.pdf "What should I do if I am trapped under rubble?" --model ./models/gemma-3n-E2B-it-Q4_K_M.gguf
+
+If you are trapped under rubble, tap steadily on a pipe or a wall so rescuers
+can hear you. Do not shout unless you have no other option: shouting wastes
+energy and makes you breathe in dangerous dust. Cover your mouth with cloth to
+filter the air.
+```
+
+Ask something the document doesn't cover and it declines rather than guessing:
+
+```
+$ wick examples/earthquake-safety.pdf "What is the population of Tokyo?" --model ./models/gemma-3n-E2B-it-Q4_K_M.gguf
+
+I don't know based on this document.
 ```
 
 ## Features
 
 - Reads a PDF and chunks it for retrieval — no manual preprocessing needed.
 - Runs fully offline once the model is downloaded: no API keys, no cloud calls.
+- Answers only from the document — when the text doesn't contain the answer, it
+  says so instead of making one up.
+- Handles non-English documents with a multilingual retrieval model (tested on
+  Persian).
 - Works with local GGUF models — Gemma, Phi, Qwen, or Llama, your choice.
 - Swappable embedding and LLM backends behind clean interfaces, so
   contributors can add new ones without touching the pipeline.
