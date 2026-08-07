@@ -18,6 +18,8 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
   similarity threshold is answered "I don't know based on this document."
   rather than handed to the model, so a weak local model can't quietly answer
   out-of-context questions from its own training data.
+- Bundled example documents (an English earthquake-safety guide and a Persian
+  water-cycle chapter) and a `demo.ps1` walkthrough for a quick end-to-end run.
 
 ### Changed
 - Answers are generated through each model's own chat template (llama.cpp chat
