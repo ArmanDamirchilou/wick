@@ -26,6 +26,11 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 - The CLI reports failures as a single `error: ...` line and exits non-zero
   instead of printing a traceback.
 
+### Fixed
+- Non-English answers (e.g. Persian) no longer crash the CLI with a
+  `UnicodeEncodeError` on a legacy Windows console — stdout/stderr are set to
+  UTF-8.
+
 ## [0.1.0] - 2026-07-26
 
 ### Added

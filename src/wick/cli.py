@@ -6,6 +6,11 @@ from .pipeline import OfflineAssistant
 
 
 def main() -> None:
+    # Non-English answers must survive a legacy Windows console code page.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
+
     parser = argparse.ArgumentParser(description="Ask questions about a PDF, fully offline.")
     parser.add_argument("pdf", type=Path, help="Path to the PDF file")
     parser.add_argument("question", help="Question to ask about the document")
