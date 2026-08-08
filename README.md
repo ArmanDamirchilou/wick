@@ -1,7 +1,5 @@
 # wick
 
-*(working name — see [naming note](#naming-note) below)*
-
 An offline AI assistant that answers questions from local documents, no internet connection required.
 
 ![CI](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml/badge.svg)
@@ -65,6 +63,13 @@ $ wick examples/earthquake-safety.pdf "What is the population of Tokyo?" --model
 I don't know based on this document.
 ```
 
+On Windows, [`demo.ps1`](demo.ps1) runs this whole walkthrough — English and
+Persian — in one go:
+
+```powershell
+.\demo.ps1 -Model .\models\gemma-3n-E2B-it-Q4_K_M.gguf
+```
+
 ## Features
 
 - Reads a PDF and chunks it for retrieval — no manual preprocessing needed.
@@ -104,11 +109,6 @@ See [`CHANGELOG.md`](CHANGELOG.md) for what's actually shipped so far.
 Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for
 setup, workflow, and commit conventions. Check open issues labeled
 `good first issue` for a place to start.
-
-## Naming note
-
-`wick` is a placeholder while the project is young. If you're reading this
-after the rename, the name below the title is stale — open an issue.
 
 ## License
 
