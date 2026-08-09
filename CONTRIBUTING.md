@@ -16,14 +16,16 @@ That installs the core package plus test/lint tooling. You don't need a
 model file or the `embeddings`/`llm` extras just to run the test suite —
 those are only required if you're actually running the assistant end to end.
 
-To run it for real, you'll additionally need:
+To run it for real:
 
 ```bash
-pip install -e ".[embeddings,llm]"
+pip install -e ".[embeddings]"
+pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+wick --download-model
 ```
 
-and a local GGUF model file (see `docs/models.md` for recommendations and
-download links).
+The prebuilt wheel avoids needing a C++ toolchain; `pip install -e ".[embeddings,llm]"`
+builds from source if you'd rather. See `docs/models.md` for other models.
 
 ### Integration test
 

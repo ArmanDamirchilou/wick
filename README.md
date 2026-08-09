@@ -1,54 +1,34 @@
 # wick
 
-An offline AI assistant that answers questions from local documents, no internet connection required.
+Ask questions about a PDF using a language model that runs on your own machine — no API keys, no account, no internet.
 
-![CI](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml/badge.svg)
-![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)
+[![Try it in your browser](https://img.shields.io/badge/try%20it-in%20your%20browser-yellow?style=for-the-badge)](https://huggingface.co/spaces/armandamirchilou/wick)
+[![PyPI](https://img.shields.io/pypi/v/wick-offline?style=for-the-badge)](https://pypi.org/project/wick-offline/)
+[![CI](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml/badge.svg)](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/armandamirchilou/wick/blob/main/LICENSE)
 
-## Why
+![wick answering questions about a PDF, offline](https://raw.githubusercontent.com/armandamirchilou/wick/main/docs/demo.gif)
 
-Internet access is something a lot of people take for granted. When it
-disappears — through a blackout, a disaster, or a shutdown — access to
-information shouldn't have to disappear with it. `wick` reads a PDF once,
-then answers questions about it entirely offline: no API calls, no signal,
-no dependency on a network that might not be there when it matters most.
+## Try it
 
-## Quick start
+**[Open the hosted demo →](https://huggingface.co/spaces/armandamirchilou/wick)** — upload a PDF and ask,
+nothing to install. (There's also a terminal recording: [asciinema cast](https://github.com/armandamirchilou/wick/blob/main/docs/demo.cast).)
 
-Install the retrieval backend, then a prebuilt CPU build of the model runtime:
+Or run it where it's meant to run — your own machine:
 
 ```bash
-pip install -e ".[embeddings]"
+pip install "wick-offline[embeddings]"
 pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
+wick --download-model
 ```
 
-The second line grabs a prebuilt `llama-cpp-python` wheel, so you don't need a
-C++ compiler (this is also the reliable path on Windows). If you have a
-toolchain and would rather build from source, `pip install -e ".[embeddings,llm]"`
-works too.
-
-Download a local model (see [`docs/models.md`](docs/models.md) for picks suited
-to weak hardware), then ask a question:
+That's the only part that needs a connection. Now unplug it:
 
 ```bash
-wick examples/earthquake-safety.pdf "What should I do during the shaking?" --model ./models/your-model.gguf
+wick examples/earthquake-safety.pdf "What should I do if I am trapped under rubble?"
 ```
 
-For a non-English document, add a multilingual retrieval model so the search
-step understands the language:
-
-```bash
-wick chapter.pdf "این فصل درباره چیست؟" --model ./models/your-model.gguf --embed-model paraphrase-multilingual-MiniLM-L12-v2
 ```
-
-## Example
-
-Real output, using the bundled example guide and a Gemma 3n model:
-
-```
-$ wick examples/earthquake-safety.pdf "What should I do if I am trapped under rubble?" --model ./models/gemma-3n-E2B-it-Q4_K_M.gguf
-
 If you are trapped under rubble, tap steadily on a pipe or a wall so rescuers
 can hear you. Do not shout unless you have no other option: shouting wastes
 energy and makes you breathe in dangerous dust. Cover your mouth with cloth to
@@ -58,29 +38,49 @@ filter the air.
 Ask something the document doesn't cover and it declines rather than guessing:
 
 ```
-$ wick examples/earthquake-safety.pdf "What is the population of Tokyo?" --model ./models/gemma-3n-E2B-it-Q4_K_M.gguf
+$ wick examples/earthquake-safety.pdf "What is the population of Tokyo?"
 
 I don't know based on this document.
 ```
 
-On Windows, [`demo.ps1`](demo.ps1) runs this whole walkthrough — English and
-Persian — in one go:
+## Why
 
-```powershell
-.\demo.ps1 -Model .\models\gemma-3n-E2B-it-Q4_K_M.gguf
-```
+Internet access is something a lot of people take for granted. When it
+disappears — through a blackout, a disaster, or a shutdown — access to
+information shouldn't have to disappear with it. The tools in this space
+mostly assume Docker, a stable connection, and someone comfortable in a
+terminal. `wick` assumes a six-year-old laptop and no signal.
 
 ## Features
 
-- Reads a PDF and chunks it for retrieval — no manual preprocessing needed.
-- Runs fully offline once the model is downloaded: no API keys, no cloud calls.
-- Answers only from the document — when the text doesn't contain the answer, it
-  says so instead of making one up.
-- Handles non-English documents with a multilingual retrieval model (tested on
-  Persian).
-- Works with local GGUF models — Gemma, Phi, Qwen, or Llama, your choice.
-- Swappable embedding and LLM backends behind clean interfaces, so
-  contributors can add new ones without touching the pipeline.
+- Reads a PDF and chunks it for retrieval — no manual preprocessing.
+- Runs with the network unplugged once a model is downloaded; the answering
+  path puts the Hugging Face client in offline mode so it provably can't
+  phone home.
+- Answers only from the document. A similarity threshold rejects off-topic
+  questions before the model sees them, so a small model can't quietly answer
+  from its training data.
+- Handles non-English documents — tested end to end on Persian, which needs a
+  multilingual retrieval model as well as a multilingual LLM.
+- Works with any local GGUF: Gemma, Phi, Qwen, Llama. Two are one flag away
+  (`--download-model`), the rest take `--model /path/to.gguf`.
+- Prints the answer and nothing else — no progress bars, no loader chatter.
+
+## Non-English documents
+
+Retrieval is a separate model from the one that writes the answer, and the
+default only understands English. For a Persian (or Arabic, Turkish, Hindi…)
+PDF, download a multilingual pair once:
+
+```bash
+wick --download-model --model-name gemma-3n-e2b \
+  --embed-model paraphrase-multilingual-MiniLM-L12-v2
+
+wick chapter.pdf "بیشتر آب کره زمین کجاست؟" --model-name gemma-3n-e2b \
+  --embed-model paraphrase-multilingual-MiniLM-L12-v2
+```
+
+See [`docs/models.md`](https://github.com/armandamirchilou/wick/blob/main/docs/models.md) for which model fits which hardware.
 
 ## How it works
 
@@ -90,26 +90,76 @@ PDF → extract text → chunk → embed → FAISS index
 question → embed ──────────────────────► search ──► top-k chunks ──► local LLM ──► answer
 ```
 
-Retrieval and generation are two separate, swappable pieces
-(`embeddings.py` / `llm.py`), so a contributor can drop in a different
-embedding model or inference backend without touching the rest of the
-pipeline.
+Two design decisions are worth explaining:
+
+**The relevance gate is what makes refusal reliable.** Telling a model "only
+answer from the context" works on a large model and fails on a small one —
+Qwen 0.5B will happily tell you the capital of France no matter what the
+prompt says. So the refusal doesn't depend on the prompt: if the best-matching
+chunk scores below a cosine-similarity threshold, the model is never called.
+In testing, in-context questions scored 0.32–0.72 and out-of-context ones
+0.00–0.10, in both English and Persian, which leaves a wide gap to put the
+threshold in.
+
+**Retrieval and generation are swappable, and separately.** `embeddings.py`
+defines an `Embedder` protocol and `llm.py` wraps llama.cpp behind a two-method
+class, so changing either one doesn't touch the pipeline. That's not
+architecture for its own sake — it's the reason Persian support was a flag
+rather than a rewrite, and the reason a contributor can add a backend without
+reading the rest of the codebase.
+
+FAISS uses a flat index with inner product over normalized vectors, which is
+exact cosine similarity. Fine to a few thousand chunks; past that it's a real
+problem to solve, but not this one.
+
+## Local setup
+
+Requires Python 3.10+. The second install line pulls a prebuilt CPU wheel for
+`llama-cpp-python`, so you don't need a C++ toolchain — this is also the only
+reliable path on Windows, where building from source hits the 260-character
+path limit. With a compiler available, `pip install "wick-offline[embeddings,llm]"`
+works instead.
+
+Models land in `~/.wick/models` (`./models` is also checked). Nothing else is
+written outside that directory.
+
+Running from a clone:
+
+```bash
+git clone https://github.com/armandamirchilou/wick.git
+cd wick
+pip install -e ".[embeddings,dev]"
+pytest
+```
+
+On Windows, [`demo.ps1`](https://github.com/armandamirchilou/wick/blob/main/demo.ps1) runs the whole walkthrough — English and
+Persian — in one go.
 
 ## Roadmap
 
-- **v0.1 (current)** — MVP: PDF in, offline Q&A out, runs on a laptop.
-- **v0.2** — School use: point it at a textbook chapter, ask curriculum-shaped questions.
-- **v0.3** — Crisis packs: pre-built offline guides (first aid, earthquake, fire).
-- **v0.4** — Accessibility: plain-language explanations for things like medication leaflets.
+- **v0.2 (current)** — one-command install, hosted demo, verified Persian support.
+- **v0.3** — School use: point it at a textbook chapter, ask curriculum questions.
+- **v0.4** — Crisis packs: pre-built offline guides (first aid, earthquake, fire).
+- **v0.5** — Accessibility: plain-language explanations for things like medication leaflets.
 
-See [`CHANGELOG.md`](CHANGELOG.md) for what's actually shipped so far.
+See [`CHANGELOG.md`](https://github.com/armandamirchilou/wick/blob/main/CHANGELOG.md) for what's actually shipped.
 
 ## Contributing
 
-Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for
-setup, workflow, and commit conventions. Check open issues labeled
-`good first issue` for a place to start.
+Contributions welcome — see [`CONTRIBUTING.md`](https://github.com/armandamirchilou/wick/blob/main/CONTRIBUTING.md) for setup,
+workflow, and commit conventions. Issues labeled `good first issue` are a
+place to start.
+
+## Credits
+
+Built on [llama.cpp](https://github.com/ggerganov/llama.cpp) (via
+[llama-cpp-python](https://github.com/abetlen/llama-cpp-python)),
+[sentence-transformers](https://www.sbert.net/),
+[FAISS](https://github.com/facebookresearch/faiss), and
+[pypdf](https://github.com/py-pdf/pypdf). Models by Alibaba (Qwen2.5) and
+Google (Gemma 3n), quantized builds from
+[Unsloth](https://huggingface.co/unsloth).
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE).
+MIT — see [`LICENSE`](https://github.com/armandamirchilou/wick/blob/main/LICENSE).

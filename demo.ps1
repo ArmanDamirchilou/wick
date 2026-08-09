@@ -1,12 +1,14 @@
-﻿# wick demo — a clean end-to-end run to screen-record.
+# wick demo — a clean end-to-end run to screen-record.
 #
 # Usage (from the repo root, with the package installed):
-#   .\demo.ps1 -Model .\models\gemma-3n-E2B-it-Q4_K_M.gguf
+#   .\demo.ps1
+#   .\demo.ps1 -ModelName gemma-3n-e2b     # multilingual, ~3 GB
 #
 # Everything after the model loads is fully offline.
 
 param(
-    [string]$Model      = ".\models\gemma-3n-E2B-it-Q4_K_M.gguf",
+    [ValidateSet("qwen2.5-0.5b", "gemma-3n-e2b")]
+    [string]$ModelName  = "qwen2.5-0.5b",
     [string]$EmbedModel = "paraphrase-multilingual-MiniLM-L12-v2"
 )
 
@@ -14,26 +16,20 @@ $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $Wick = if (Test-Path ".\.venv\Scripts\wick.exe") { ".\.venv\Scripts\wick.exe" } else { "wick" }
 
-if (-not (Test-Path $Model)) {
-    Write-Host "Model not found: $Model" -ForegroundColor Red
-    Write-Host "Download a GGUF model into .\models\ first (see docs/models.md)."
-    exit 1
-}
-
 function Ask {
     param($Pdf, $Question, $Embed)
     Write-Host ""
     Write-Host "> $Question" -ForegroundColor Cyan
     if ($Embed) {
-        & $Wick $Pdf $Question --model $Model --embed-model $Embed
+        & $Wick $Pdf $Question --model-name $ModelName --embed-model $Embed
     } else {
-        & $Wick $Pdf $Question --model $Model
+        & $Wick $Pdf $Question --model-name $ModelName
     }
     Start-Sleep -Seconds 1
 }
 
 Write-Host "wick - offline question answering over a local PDF" -ForegroundColor Green
-Write-Host "Model: $Model"
+Write-Host "Model: $ModelName (run 'wick --download-model' first if you haven't)"
 Write-Host "From here on, no internet connection is used."
 
 $eng = ".\examples\earthquake-safety.pdf"
@@ -50,7 +46,6 @@ Ask $eng "What is the population of Tokyo?"
 $fa = ".\examples\water-cycle-fa.pdf"
 Write-Host ""
 Write-Host "== Persian: same engine, a non-English document ==" -ForegroundColor Green
-Write-Host "(the first Persian question downloads a multilingual retrieval model, once)"
 Ask $fa "آب در چه دمایی به جوش می‌آید؟" $EmbedModel
 Ask $fa "بیشتر آب کره زمین کجاست؟" $EmbedModel
 
