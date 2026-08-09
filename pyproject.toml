@@ -1,16 +1,33 @@
 [project]
-name = "wick"
-version = "0.1.0"
+# PyPI's `wick` is taken by an unrelated package, so the distribution is
+# `wick-offline`; the import name and the command are both still `wick`.
+name = "wick-offline"
+version = "0.2.0"
 description = "An offline AI assistant that answers questions from local documents, no internet required."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Arman Damirchilou" }]
+keywords = ["offline", "rag", "llm", "pdf", "llama-cpp", "privacy"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Text Processing :: Indexing",
+]
 dependencies = [
     "pypdf>=4.0",
     "faiss-cpu>=1.8",
     "numpy>=1.26",
+    "huggingface-hub>=0.23",
 ]
+
+[project.urls]
+Homepage = "https://github.com/armandamirchilou/wick"
+Source = "https://github.com/armandamirchilou/wick"
+Changelog = "https://github.com/armandamirchilou/wick/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 embeddings = ["sentence-transformers>=3.0"]

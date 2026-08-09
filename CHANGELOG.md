@@ -7,7 +7,15 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-09
+
 ### Added
+- `wick --download-model` fetches a model and the retrieval encoder in one
+  step, so getting from install to a first answer is two commands.
+- `--model` is now optional: wick looks for a downloaded model in `./models`
+  and `~/.wick/models` before asking for a path.
+- `--model-name` to pick between the small English-first default
+  (Qwen2.5 0.5B, ~400 MB) and the multilingual Gemma 3n E2B.
 - Clear error message when the `--model` path doesn't point at a real file.
 - Explicit errors for a missing PDF, a corrupt/non-PDF file, and a scanned or
   image-only PDF with no extractable text (instead of silently producing an
@@ -22,6 +30,10 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
   water-cycle chapter) and a `demo.ps1` walkthrough for a quick end-to-end run.
 
 ### Changed
+- Published to PyPI as `wick-offline` — the `wick` name was already taken by an
+  unrelated package. The import name and the command are still `wick`.
+- Answering runs with the Hugging Face hub client in offline mode, so a cached
+  setup provably makes no network calls.
 - Answers are generated through each model's own chat template (llama.cpp chat
   completion) instead of a hand-written prompt with a hardcoded `</s>` stop
   token, so Gemma, Qwen, Phi, and Llama GGUFs all format correctly.
@@ -29,6 +41,8 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
   instead of printing a traceback.
 
 ### Fixed
+- Loader progress bars, hub warnings, and llama.cpp backend notes no longer
+  bury the answer — the CLI prints the answer and nothing else.
 - Non-English answers (e.g. Persian) no longer crash the CLI with a
   `UnicodeEncodeError` on a legacy Windows console — stdout/stderr are set to
   UTF-8.
