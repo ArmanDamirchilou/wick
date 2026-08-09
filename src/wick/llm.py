@@ -1,6 +1,10 @@
+import ctypes
 from pathlib import Path
 
 REFUSAL = "I don't know based on this document."
+
+# Module-level so ctypes doesn't collect the callback while llama.cpp still holds it.
+_SILENCE = None
 
 
 class LocalLLM:
@@ -12,13 +16,14 @@ class LocalLLM:
                 f"Model file not found: {model_path}\n"
                 "Download a GGUF model and pass its path with --model (see docs/models.md)."
             )
+        import llama_cpp
         from llama_cpp import Llama
 
+        _silence_llama_cpp(llama_cpp)
         self.llm = Llama(model_path=str(model_path), n_ctx=n_ctx, verbose=False)
 
     def answer(self, question: str, context: list[str]) -> str:
-        # Chat completion applies the model's own template from the GGUF metadata,
-        # so the right turn/stop tokens are used whether it's Gemma, Qwen, or Llama.
+        # Chat completion applies each GGUF's own template, so stop tokens are always right.
         out = self.llm.create_chat_completion(
             messages=[{"role": "user", "content": self._build_prompt(question, context)}],
             max_tokens=512,
@@ -37,3 +42,11 @@ class LocalLLM:
             f"Question: {question}\n\n"
             "Answer using only the context above."
         )
+
+
+def _silence_llama_cpp(llama_cpp) -> None:
+    # verbose=False still lets the C library write backend notes to stderr.
+    global _SILENCE
+    if _SILENCE is None:
+        _SILENCE = llama_cpp.llama_log_callback(lambda level, text, user_data: None)
+        llama_cpp.llama_log_set(_SILENCE, ctypes.c_void_p(0))
