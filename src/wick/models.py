@@ -25,9 +25,9 @@ def download(name: str = DEFAULT_MODEL) -> Path:
 
 def download_embedder(model_name: str) -> None:
     """Warm the retrieval model's cache so the answering path never touches the network."""
-    from sentence_transformers import SentenceTransformer
+    from .embeddings import _import_sentence_transformers
 
-    SentenceTransformer(model_name)
+    _import_sentence_transformers()(model_name)
 
 
 def resolve(explicit: Path | None, name: str = DEFAULT_MODEL) -> Path:

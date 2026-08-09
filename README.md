@@ -22,13 +22,18 @@ pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-c
 wick --download-model
 ```
 
-That's the only part that needs a connection. Now unplug it:
+That's the only part that needs a connection. Now unplug it and point wick at a PDF:
 
 ```bash
-wick examples/earthquake-safety.pdf "What should I do if I am trapped under rubble?"
+wick your-document.pdf "What does it say about evacuation routes?"
 ```
 
+Real output, using the earthquake-safety guide in
+[`examples/`](https://github.com/armandamirchilou/wick/tree/main/examples):
+
 ```
+$ wick examples/earthquake-safety.pdf "What should I do if I am trapped under rubble?"
+
 If you are trapped under rubble, tap steadily on a pipe or a wall so rescuers
 can hear you. Do not shout unless you have no other option: shouting wastes
 energy and makes you breathe in dangerous dust. Cover your mouth with cloth to
