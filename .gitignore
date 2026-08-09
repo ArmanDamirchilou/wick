@@ -12,3 +12,7 @@ dist/
 # See docs/models.md for where to download them instead.
 *.gguf
 models/
+
+# Local editor and assistant configuration stays out of the repo.
+.claude/
+CLAUDE.md
