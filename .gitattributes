@@ -1,1 +1,4 @@
 *.pdf binary
+*.gif binary
+*.gguf binary
+*.cast text eol=lf

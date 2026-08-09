@@ -67,7 +67,7 @@ terminal. `wick` assumes a six-year-old laptop and no signal.
   from its training data.
 - Handles non-English documents — tested end to end on Persian, which needs a
   multilingual retrieval model as well as a multilingual LLM.
-- Works with any local GGUF: Gemma, Phi, Qwen, Llama. Two are one flag away
+- Works with any local GGUF: Gemma, Phi, Qwen, Llama. Three are one flag away
   (`--download-model`), the rest take `--model /path/to.gguf`.
 - Prints the answer and nothing else — no progress bars, no loader chatter.
 

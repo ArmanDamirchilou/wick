@@ -7,8 +7,8 @@
 # Everything after the model loads is fully offline.
 
 param(
-    [ValidateSet("qwen2.5-0.5b", "gemma-3n-e2b")]
-    [string]$ModelName  = "qwen2.5-0.5b",
+    [ValidateSet("qwen2.5-0.5b", "qwen2.5-1.5b", "gemma-3n-e2b")]
+    [string]$ModelName  = "qwen2.5-1.5b",
     [string]$EmbedModel = "paraphrase-multilingual-MiniLM-L12-v2"
 )
 

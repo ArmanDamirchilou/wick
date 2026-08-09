@@ -14,8 +14,14 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
   step, so getting from install to a first answer is two commands.
 - `--model` is now optional: wick looks for a downloaded model in `./models`
   and `~/.wick/models` before asking for a path.
-- `--model-name` to pick between the small English-first default
-  (Qwen2.5 0.5B, ~400 MB) and the multilingual Gemma 3n E2B.
+- `--model-name` to pick from a small catalog: Qwen2.5 1.5B (the default,
+  1.1 GB), Qwen2.5 0.5B for very weak machines, and the multilingual
+  Gemma 3n E2B. Qwen2.5 0.5B was the first default and lost the job for
+  answering "I don't know" to questions the document plainly answers.
+- A Gradio demo (`space/`) and a deploy script, so the tool can be tried in a
+  browser without downloading a model first.
+- `scripts/record_demo.py`, which runs the real CLI and turns the captured
+  output into the terminal recording in the README.
 - Clear error message when the `--model` path doesn't point at a real file.
 - Explicit errors for a missing PDF, a corrupt/non-PDF file, and a scanned or
   image-only PDF with no extractable text (instead of silently producing an

@@ -12,7 +12,7 @@ from wick.pipeline import OfflineAssistant
 EMBED_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
 
 CHOICES = {
-    "Qwen2.5 0.5B — fast, English": "qwen2.5-0.5b",
+    "Qwen2.5 1.5B — faster, English": "qwen2.5-1.5b",
     "Gemma 3n E2B — multilingual, slower": "gemma-3n-e2b",
 }
 

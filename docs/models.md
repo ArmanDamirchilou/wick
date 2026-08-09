@@ -5,8 +5,8 @@ downloaded once and git-ignored. `wick --download-model` fetches the default
 and you never think about it again:
 
 ```bash
-wick --download-model                          # Qwen2.5 0.5B, ~400 MB
-wick --download-model --model-name gemma-3n-e2b  # Gemma 3n E2B, ~3 GB
+wick --download-model                            # Qwen2.5 1.5B, 1.1 GB
+wick --download-model --model-name gemma-3n-e2b  # Gemma 3n E2B, 3.0 GB
 ```
 
 Downloads land in `~/.wick/models`, and `wick` looks there (and in `./models`)
@@ -16,8 +16,15 @@ automatically, so `--model` is only needed for a GGUF from somewhere else.
 
 | Hardware ceiling | Model | `--model-name` | Notes |
 |---|---|---|---|
-| ~2 GB RAM | Qwen2.5 0.5B (Q4_K_M) | `qwen2.5-0.5b` | The default. Tiny and fast; English answers are short but accurate |
+| ~4 GB RAM | Qwen2.5 1.5B (Q4_K_M) | `qwen2.5-1.5b` | The default. Answers English documents accurately and refuses correctly |
+| ~2 GB RAM | Qwen2.5 0.5B (Q4_K_M) | `qwen2.5-0.5b` | Last resort for very weak machines. It sometimes says "I don't know" about things the document plainly states |
 | ~8 GB RAM, multilingual | Gemma 3n E2B (Q4_K_M) | `gemma-3n-e2b` | Trained on 140+ languages — the pick for Persian/Dari |
+
+Model size shows up as accuracy, not just fluency. Asked how much water to
+store from a guide that says "four liters per person per day, three days":
+1.5B quotes it, 0.5B claims the document doesn't say. On the same Persian
+chapter, Gemma answers "100°C" and 1.5B answers "1400°C". Pick for the
+language you actually need, not for the download size.
 
 Any other GGUF works too — Phi-4-mini for a smaller English-only footprint,
 Qwen3 4B for stronger cross-lingual handling:

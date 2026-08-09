@@ -11,8 +11,7 @@ def test_resolve_prefers_an_explicit_path():
 
 
 def test_resolve_finds_a_model_in_a_search_directory(monkeypatch, tmp_path):
-    _, filename = models.CATALOG[models.DEFAULT_MODEL]
-    downloaded = tmp_path / filename
+    downloaded = tmp_path / models.CATALOG[models.DEFAULT_MODEL].filename
     downloaded.touch()
     monkeypatch.setattr(models, "SEARCH_DIRS", (tmp_path,))
 
