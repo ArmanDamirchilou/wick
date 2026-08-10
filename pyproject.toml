@@ -2,7 +2,7 @@
 # PyPI's `wick` is taken by an unrelated package, so the distribution is
 # `wick-offline`; the import name and the command are both still `wick`.
 name = "wick-offline"
-version = "0.2.0"
+version = "0.3.0"
 description = "An offline AI assistant that answers questions from local documents, no internet required."
 readme = "README.md"
 requires-python = ">=3.10"

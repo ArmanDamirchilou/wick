@@ -36,11 +36,11 @@ def assistant_for(model_name: str) -> OfflineAssistant:
     return _assistants[model_name]
 
 
-def ask(pdf_path: str, question: str, choice: str) -> str:
+def ask(pdf_path: str, question: str, choice: str) -> tuple[str, str]:
     if not pdf_path:
-        return "Upload a PDF (or pick one of the examples below) first."
+        return "Upload a PDF (or pick one of the examples below) first.", ""
     if not question.strip():
-        return "Ask a question about the document."
+        return "Ask a question about the document.", ""
 
     model_name = CHOICES[choice]
     assistant = assistant_for(model_name)
@@ -48,7 +48,10 @@ def ask(pdf_path: str, question: str, choice: str) -> str:
     if _loaded.get(model_name) != pdf_path:
         assistant.load_pdf(pdf_path)
         _loaded[model_name] = pdf_path
-    return assistant.ask(question)
+
+    answer = assistant.ask(question)
+    passages = "\n\n".join(f"**[{i}]** {p}" for i, p in enumerate(answer.sources, start=1))
+    return answer.text, passages or "_No passage cleared the relevance threshold._"
 
 
 with gr.Blocks(title="wick — offline PDF Q&A", theme=gr.themes.Soft()) as demo:
@@ -67,6 +70,8 @@ with gr.Blocks(title="wick — offline PDF Q&A", theme=gr.themes.Soft()) as demo
             submit = gr.Button("Ask", variant="primary")
         with gr.Column():
             answer = gr.Textbox(label="Answer", lines=10, show_copy_button=True)
+            with gr.Accordion("Where this came from", open=False):
+                sources = gr.Markdown()
 
     gr.Markdown(
         "Answers come only from the document. When the text doesn't contain the answer, "
@@ -75,8 +80,8 @@ with gr.Blocks(title="wick — offline PDF Q&A", theme=gr.themes.Soft()) as demo
     )
     gr.Examples(examples=EXAMPLES, inputs=[pdf, question, model])
 
-    submit.click(ask, inputs=[pdf, question, model], outputs=answer)
-    question.submit(ask, inputs=[pdf, question, model], outputs=answer)
+    for trigger in (submit.click, question.submit):
+        trigger(ask, inputs=[pdf, question, model], outputs=[answer, sources])
 
 if __name__ == "__main__":
     download_embedder(EMBED_MODEL)

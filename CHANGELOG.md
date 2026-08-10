@@ -7,6 +7,8 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-10
+
 ### Added
 - Session mode: `wick document.pdf` with no question loads the model once and
   answers as many questions as you type. Three questions took 33.4s as separate
