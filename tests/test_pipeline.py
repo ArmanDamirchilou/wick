@@ -57,6 +57,14 @@ def test_ask_answers_when_a_chunk_is_relevant(monkeypatch):
     assert answer.sources == ["the north star"]
 
 
+def test_load_text_rejects_a_document_with_nothing_in_it(monkeypatch):
+    monkeypatch.setattr(pipeline, "LocalLLM", lambda *a, **k: _StubLLM())
+    assistant = OfflineAssistant(Path("unused.gguf"), embedder=_FakeEmbedder([1, 0, 0]))
+
+    with pytest.raises(ValueError, match="no readable text"):
+        assistant.load_text("   \n  ")
+
+
 def test_load_text_counts_the_passages_it_indexed(monkeypatch):
     monkeypatch.setattr(pipeline, "LocalLLM", lambda *a, **k: _StubLLM())
     assistant = OfflineAssistant(Path("unused.gguf"), embedder=_FakeEmbedder([1, 0, 0]))

@@ -4,7 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-from . import models
+from . import __version__, models
 from .ingest import extract_text
 from .pipeline import Answer, OfflineAssistant
 
@@ -45,6 +45,7 @@ def parse_args() -> argparse.Namespace:
         description="Ask questions about a PDF, fully offline.",
         epilog="Omit the question to open a session and ask several without reloading the model.",
     )
+    parser.add_argument("--version", action="version", version=f"wick {__version__}")
     parser.add_argument("pdf", type=Path, nargs="?", help="Path to the PDF file")
     parser.add_argument("question", nargs="?", help="Question to ask; omit for a session")
     parser.add_argument(

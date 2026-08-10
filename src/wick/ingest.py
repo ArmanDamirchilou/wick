@@ -21,6 +21,9 @@ def extract_text(pdf_path: Path) -> str:
 
 
 def chunk_text(text: str, *, chunk_size: int = 800, overlap: int = 120) -> list[str]:
+    # Without this the loop never advances and the caller hangs instead of failing.
+    if overlap >= chunk_size:
+        raise ValueError(f"overlap ({overlap}) must be smaller than chunk_size ({chunk_size})")
     # Overlap keeps an idea from getting cut in half right at a chunk boundary
     chunks = []
     start = 0

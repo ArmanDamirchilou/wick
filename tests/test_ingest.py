@@ -15,6 +15,11 @@ def test_chunk_text_drops_empty_pieces():
     assert chunk_text("   ") == []
 
 
+def test_chunk_text_rejects_an_overlap_that_would_never_advance():
+    with pytest.raises(ValueError, match="must be smaller"):
+        chunk_text("a" * 2000, chunk_size=100, overlap=100)
+
+
 def test_extract_text_missing_file(tmp_path):
     with pytest.raises(FileNotFoundError):
         extract_text(tmp_path / "nope.pdf")

@@ -84,5 +84,8 @@ with gr.Blocks(title="wick — offline PDF Q&A", theme=gr.themes.Soft()) as demo
         trigger(ask, inputs=[pdf, question, model], outputs=[answer, sources])
 
 if __name__ == "__main__":
+    # Warm the default before serving, so the first visitor waits on a load and
+    # not on a gigabyte of download.
     download_embedder(EMBED_MODEL)
+    assistant_for(CHOICES[FAST])
     demo.queue(max_size=12).launch()

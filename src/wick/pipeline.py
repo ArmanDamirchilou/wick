@@ -32,6 +32,8 @@ class OfflineAssistant:
 
     def load_text(self, text: str) -> None:
         chunks = chunk_text(text)
+        if not chunks:
+            raise ValueError("Nothing to index — the document has no readable text.")
         vectors = self.embedder.embed(chunks)
         self.store = VectorStore(dim=vectors.shape[1])
         self.store.add(vectors, chunks)
