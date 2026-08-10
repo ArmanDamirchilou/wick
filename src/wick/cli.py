@@ -81,10 +81,13 @@ def parse_args() -> argparse.Namespace:
 
 
 def download(args: argparse.Namespace) -> None:
-    print(f"Language model: {models.download(args.model_name)}")
-    for embed_model in {args.embed_model or ENGLISH_EMBED, MULTILINGUAL_EMBED}:
+    _quiet_model_loading()
+    model = models.CATALOG[args.model_name]
+    print(f"Downloading {args.model_name} ({model.size})…")
+    print(f"  {models.download(args.model_name)}")
+    for embed_model in sorted({args.embed_model or ENGLISH_EMBED, MULTILINGUAL_EMBED}):
+        print(f"Downloading retrieval model {embed_model}…")
         models.download_embedder(embed_model)
-        print(f"Retrieval model: {embed_model}")
     print("Done — from here on wick needs no internet.")
 
 
@@ -129,9 +132,19 @@ def _go_offline() -> None:
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
     os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
+    _quiet_model_loading()
+
+
+def _quiet_model_loading() -> None:
+    # Weight-loading bars say nothing useful; download bars are left alone.
     os.environ["TRANSFORMERS_VERBOSITY"] = "error"
     for name in ("huggingface_hub", "sentence_transformers", "transformers"):
         logging.getLogger(name).setLevel(logging.ERROR)
+    try:
+        from transformers.utils.logging import disable_progress_bar
+    except ImportError:
+        return
+    disable_progress_bar()
 
 
 if __name__ == "__main__":
