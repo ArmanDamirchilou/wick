@@ -7,6 +7,21 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
+### Added
+- Session mode: `wick document.pdf` with no question loads the model once and
+  answers as many questions as you type. Three questions took 33.4s as separate
+  commands and 15.7s in a session.
+- `--show-sources` prints the passages an answer was drawn from, so the claim
+  that answers come only from the document is checkable rather than trusted.
+- The retrieval model is chosen from the document's script, so a Persian or
+  Hindi PDF works without knowing that `--embed-model` exists.
+
+### Changed
+- `OfflineAssistant.ask()` returns an `Answer` with `.text` and `.sources`
+  instead of a bare string.
+- CI runs on Windows as well as Linux, across Python 3.10 and 3.12, and builds
+  the package on every push.
+
 ## [0.2.0] - 2026-08-09
 
 ### Added

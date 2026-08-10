@@ -14,13 +14,16 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 OUT = REPO / "docs"
 COLUMNS = 92
-GEMMA = ["--model-name", "gemma-3n-e2b", "--embed-model", "paraphrase-multilingual-MiniLM-L12-v2"]
+GEMMA = ["--model-name", "gemma-3n-e2b"]
 
 STEPS = [
     (["examples/earthquake-safety.pdf", "What should I do the moment the shaking starts?"], None),
-    (["examples/earthquake-safety.pdf", "What should I do if I am trapped under rubble?"], None),
-    (["examples/earthquake-safety.pdf", "What is the population of Tokyo?"], "…and when it isn't in the document, it says so"),
-    (["examples/water-cycle-fa.pdf", "بیشتر آب کره زمین کجاست؟"] + GEMMA, "…same engine, a Persian document"),
+    (["examples/earthquake-safety.pdf", "How much water should I store, and for how long?"],
+     "…the answer has to be in the document"),
+    (["examples/earthquake-safety.pdf", "What is the population of Tokyo?"],
+     "…and when it isn't, it says so instead of guessing"),
+    (["examples/water-cycle-fa.pdf", "بیشتر آب کره زمین کجاست؟", *GEMMA],
+     "…same engine, a Persian document, no extra flags for the language"),
 ]
 
 BANNER = "wick — question answering over a local PDF, with the network unplugged"

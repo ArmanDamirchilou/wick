@@ -23,9 +23,14 @@ def assistant():
 @pytest.mark.integration
 def test_answers_a_question_from_the_document(assistant):
     answer = assistant.ask("How much power does the primary generator produce?")
-    assert "3.5" in answer
+
+    assert "3.5" in answer.text
+    assert any("3.5" in passage for passage in answer.sources)
 
 
 @pytest.mark.integration
 def test_refuses_a_question_the_document_cannot_answer(assistant):
-    assert assistant.ask("What is the capital of France?") == REFUSAL
+    answer = assistant.ask("What is the capital of France?")
+
+    assert answer.text == REFUSAL
+    assert answer.sources == []

@@ -43,9 +43,24 @@ def test_ask_before_loading_pdf_raises(monkeypatch):
 
 def test_ask_refuses_when_nothing_clears_the_bar(monkeypatch):
     assistant = _assistant(monkeypatch, query_vector=[0, 1, 0])  # orthogonal → score 0
-    assert assistant.ask("something unrelated") == REFUSAL
+    answer = assistant.ask("something unrelated")
+
+    assert answer.text == REFUSAL
+    assert answer.sources == []
 
 
 def test_ask_answers_when_a_chunk_is_relevant(monkeypatch):
     assistant = _assistant(monkeypatch, query_vector=[1, 0, 0])  # score 1
-    assert "the north star" in assistant.ask("about the north star")
+    answer = assistant.ask("about the north star")
+
+    assert "the north star" in answer.text
+    assert answer.sources == ["the north star"]
+
+
+def test_load_text_counts_the_passages_it_indexed(monkeypatch):
+    monkeypatch.setattr(pipeline, "LocalLLM", lambda *a, **k: _StubLLM())
+    assistant = OfflineAssistant(Path("unused.gguf"), embedder=_FakeEmbedder([1, 0, 0]))
+    assistant.load_text("word " * 600)  # 3000 chars → more than one chunk
+
+    assert assistant.passages > 1
+    assert assistant.passages == len(assistant.store.chunks)

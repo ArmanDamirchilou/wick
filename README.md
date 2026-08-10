@@ -28,6 +28,15 @@ That's the only part that needs a connection. Now unplug it and point wick at a 
 wick your-document.pdf "What does it say about evacuation routes?"
 ```
 
+Drop the question to keep asking without paying for the model load again:
+
+```
+$ wick your-document.pdf
+your-document.pdf: 34 passages indexed. Ask a question, or press Ctrl-C to leave.
+
+> What does it say about evacuation routes?
+```
+
 Real output, using the earthquake-safety guide in
 [`examples/`](https://github.com/armandamirchilou/wick/tree/main/examples):
 
@@ -65,27 +74,35 @@ terminal. `wick` assumes a six-year-old laptop and no signal.
 - Answers only from the document. A similarity threshold rejects off-topic
   questions before the model sees them, so a small model can't quietly answer
   from its training data.
-- Handles non-English documents — tested end to end on Persian, which needs a
-  multilingual retrieval model as well as a multilingual LLM.
+- `--show-sources` prints the passages an answer came from, so you can check
+  it against the document instead of trusting it.
+- Handles non-English documents, and picks the multilingual retrieval model on
+  its own when the PDF isn't in Latin script — no flag to know about.
+- A session (`wick doc.pdf` with no question) loads the model once and answers
+  as many questions as you like: 2.1× faster over three questions in testing.
 - Works with any local GGUF: Gemma, Phi, Qwen, Llama. Three are one flag away
   (`--download-model`), the rest take `--model /path/to.gguf`.
 - Prints the answer and nothing else — no progress bars, no loader chatter.
+  Status goes to stderr, so `wick doc.pdf "…" > answer.txt` gets just the answer.
 
 ## Non-English documents
 
 Retrieval is a separate model from the one that writes the answer, and the
-default only understands English. For a Persian (or Arabic, Turkish, Hindi…)
-PDF, download a multilingual pair once:
+default only understands English — point it at a Persian PDF and it retrieves
+nothing useful. wick checks the document's script and switches to a
+multilingual encoder itself, so the only thing left to choose is a language
+model that speaks the language:
 
 ```bash
-wick --download-model --model-name gemma-3n-e2b \
-  --embed-model paraphrase-multilingual-MiniLM-L12-v2
-
-wick chapter.pdf "بیشتر آب کره زمین کجاست؟" --model-name gemma-3n-e2b \
-  --embed-model paraphrase-multilingual-MiniLM-L12-v2
+wick --download-model --model-name gemma-3n-e2b
+wick chapter.pdf "بیشتر آب کره زمین کجاست؟" --model-name gemma-3n-e2b
 ```
 
-See [`docs/models.md`](https://github.com/armandamirchilou/wick/blob/main/docs/models.md) for which model fits which hardware.
+`--embed-model` still overrides the choice if you have a better encoder for
+your language. See
+[`docs/models.md`](https://github.com/armandamirchilou/wick/blob/main/docs/models.md)
+for which model fits which hardware, with measured examples of what the small
+ones get wrong.
 
 ## How it works
 
