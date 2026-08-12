@@ -7,21 +7,17 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
-### Added
-- A Colab notebook that installs the package and runs it on a free machine, so
-  the project can be tried without installing anything.
-
-### Changed
-- Chunks are split on word boundaries instead of raw character counts, so a
-  passage shown by `--show-sources` no longer starts mid-word.
+## [0.3.1] - 2026-08-12
 
 ### Fixed
-- `extract_text` and `load_pdf` accept a plain string path. Web frameworks hand
-  over an upload as a string, and the hosted demo crashed on every request.
+- Skipping the `llama-cpp-python` install line produced a raw `ImportError`
+  traceback on the first question. It now names the exact command to run.
 
 ## [0.3.0] - 2026-08-10
 
 ### Added
+- A Colab notebook that installs the package and runs it on a free machine, so
+  the project can be tried without installing anything first.
 - Session mode: `wick document.pdf` with no question loads the model once and
   answers as many questions as you type. Three questions took 33.4s as separate
   commands and 15.7s in a session.
@@ -33,8 +29,14 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 ### Changed
 - `OfflineAssistant.ask()` returns an `Answer` with `.text` and `.sources`
   instead of a bare string.
+- Chunks are split on word boundaries instead of raw character counts, so a
+  passage shown by `--show-sources` no longer starts mid-word.
 - CI runs on Windows as well as Linux, across Python 3.10 and 3.12, and builds
   the package on every push.
+
+### Fixed
+- `extract_text` and `load_pdf` accept a plain string path. Web frameworks hand
+  over an upload as a string, which crashed the hosted demo on every request.
 
 ## [0.2.0] - 2026-08-09
 

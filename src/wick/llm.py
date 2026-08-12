@@ -16,11 +16,9 @@ class LocalLLM:
                 f"Model file not found: {model_path}\n"
                 "Download a GGUF model and pass its path with --model (see docs/models.md)."
             )
-        import llama_cpp
-        from llama_cpp import Llama
-
+        llama_cpp = _import_llama_cpp()
         _silence_llama_cpp(llama_cpp)
-        self.llm = Llama(model_path=str(model_path), n_ctx=n_ctx, verbose=False)
+        self.llm = llama_cpp.Llama(model_path=str(model_path), n_ctx=n_ctx, verbose=False)
 
     def answer(self, question: str, context: list[str]) -> str:
         # Chat completion applies each GGUF's own template, so stop tokens are always right.
@@ -42,6 +40,19 @@ class LocalLLM:
             f"Question: {question}\n\n"
             "Answer using only the context above."
         )
+
+
+def _import_llama_cpp():
+    try:
+        import llama_cpp
+    except ImportError as e:
+        raise RuntimeError(
+            "Answering needs llama-cpp-python, which isn't installed.\n"
+            "Install a prebuilt CPU wheel (no compiler needed):\n"
+            "  pip install llama-cpp-python "
+            "--extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu"
+        ) from e
+    return llama_cpp
 
 
 def _silence_llama_cpp(llama_cpp) -> None:
