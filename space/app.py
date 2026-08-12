@@ -54,7 +54,7 @@ def ask(pdf_path: str, question: str, choice: str) -> tuple[str, str]:
     return answer.text, passages or "_No passage cleared the relevance threshold._"
 
 
-with gr.Blocks(title="wick — offline PDF Q&A", theme=gr.themes.Soft()) as demo:
+with gr.Blocks(title="wick — offline PDF Q&A") as demo:
     gr.Markdown(
         "# wick\n"
         "Ask questions about a PDF using a language model that runs on your own "
@@ -69,7 +69,7 @@ with gr.Blocks(title="wick — offline PDF Q&A", theme=gr.themes.Soft()) as demo
             model = gr.Radio(list(CHOICES), value=FAST, label="Local model")
             submit = gr.Button("Ask", variant="primary")
         with gr.Column():
-            answer = gr.Textbox(label="Answer", lines=10, show_copy_button=True)
+            answer = gr.Textbox(label="Answer", lines=10)
             with gr.Accordion("Where this came from", open=False):
                 sources = gr.Markdown()
 
@@ -88,4 +88,4 @@ if __name__ == "__main__":
     # not on a gigabyte of download.
     download_embedder(EMBED_MODEL)
     assistant_for(CHOICES[FAST])
-    demo.queue(max_size=12).launch()
+    demo.queue(max_size=12).launch(theme=gr.themes.Soft())

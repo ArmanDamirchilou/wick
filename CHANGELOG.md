@@ -7,6 +7,14 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
+### Changed
+- Chunks are split on word boundaries instead of raw character counts, so a
+  passage shown by `--show-sources` no longer starts mid-word.
+
+### Fixed
+- `extract_text` and `load_pdf` accept a plain string path. Web frameworks hand
+  over an upload as a string, and the hosted demo crashed on every request.
+
 ## [0.3.0] - 2026-08-10
 
 ### Added

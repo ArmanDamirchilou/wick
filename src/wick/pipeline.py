@@ -27,7 +27,7 @@ class OfflineAssistant:
         self.store: VectorStore | None = None
         self.passages = 0
 
-    def load_pdf(self, pdf_path: Path) -> None:
+    def load_pdf(self, pdf_path: str | Path) -> None:
         self.load_text(extract_text(pdf_path))
 
     def load_text(self, text: str) -> None:
