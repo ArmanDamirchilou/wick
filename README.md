@@ -2,7 +2,7 @@
 
 Ask questions about a PDF using a language model that runs on your own machine — no API keys, no account, no internet.
 
-[![Try it in your browser](https://img.shields.io/badge/try%20it-in%20your%20browser-yellow?style=for-the-badge)](https://huggingface.co/spaces/armandamirchilou/wick)
+[![Try it in your browser](https://img.shields.io/badge/try%20it-in%20your%20browser-yellow?style=for-the-badge)](https://colab.research.google.com/github/ArmanDamirchilou/wick/blob/main/notebooks/try_wick.ipynb)
 [![PyPI](https://img.shields.io/pypi/v/wick-offline?style=for-the-badge)](https://pypi.org/project/wick-offline/)
 [![CI](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml/badge.svg)](https://github.com/armandamirchilou/wick/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/armandamirchilou/wick/blob/main/LICENSE)
@@ -11,8 +11,10 @@ Ask questions about a PDF using a language model that runs on your own machine �
 
 ## Try it
 
-**[Open the hosted demo →](https://huggingface.co/spaces/armandamirchilou/wick)** — upload a PDF and ask,
-nothing to install. (There's also a terminal recording: [asciinema cast](https://github.com/armandamirchilou/wick/blob/main/docs/demo.cast).)
+**[Run it in Colab →](https://colab.research.google.com/github/ArmanDamirchilou/wick/blob/main/notebooks/try_wick.ipynb)**
+— installs the real package on a free machine and answers questions about a
+document, including one you upload. Nothing to install locally.
+(There's also a terminal recording: [asciinema cast](https://github.com/ArmanDamirchilou/wick/blob/main/docs/demo.cast).)
 
 Or run it where it's meant to run — your own machine:
 

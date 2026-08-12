@@ -21,3 +21,9 @@ and on your own machine it's yours — with the network unplugged.
 
 The first answer after a restart is slow, because the model is still being
 fetched in the background. Later answers take a few seconds.
+
+> Deploying this needs a Hugging Face PRO subscription — since 2026, Gradio
+> Spaces on free CPU return `402 Payment Required`. The equivalent free demo is
+> the [Colab notebook](https://colab.research.google.com/github/ArmanDamirchilou/wick/blob/main/notebooks/try_wick.ipynb),
+> which is what the README links to. Deploy this one with
+> `python scripts/deploy_space.py <user>/wick`.

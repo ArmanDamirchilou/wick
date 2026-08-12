@@ -7,6 +7,10 @@ and version numbers follow [Semantic Versioning](https://semver.org/) (`MAJOR.MI
 
 ## [Unreleased]
 
+### Added
+- A Colab notebook that installs the package and runs it on a free machine, so
+  the project can be tried without installing anything.
+
 ### Changed
 - Chunks are split on word boundaries instead of raw character counts, so a
   passage shown by `--show-sources` no longer starts mid-word.
