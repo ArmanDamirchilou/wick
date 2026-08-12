@@ -4,6 +4,8 @@ wick is an offline tool; this Space exists so a stranger can see what it does
 without downloading a model first. It runs the real package, unmodified.
 """
 
+import threading
+
 import gradio as gr
 
 from wick.models import download, download_embedder
@@ -26,14 +28,17 @@ EXAMPLES = [
 
 _assistants: dict[str, OfflineAssistant] = {}
 _loaded: dict[str, str] = {}
+# Two visitors arriving at once must not each download and load the same model.
+_lock = threading.Lock()
 
 
 def assistant_for(model_name: str) -> OfflineAssistant:
-    if model_name not in _assistants:
-        _assistants[model_name] = OfflineAssistant(
-            model_path=download(model_name), embed_model=EMBED_MODEL
-        )
-    return _assistants[model_name]
+    with _lock:
+        if model_name not in _assistants:
+            _assistants[model_name] = OfflineAssistant(
+                model_path=download(model_name), embed_model=EMBED_MODEL
+            )
+        return _assistants[model_name]
 
 
 def ask(pdf_path: str, question: str, choice: str) -> tuple[str, str]:
@@ -83,9 +88,13 @@ with gr.Blocks(title="wick — offline PDF Q&A") as demo:
     for trigger in (submit.click, question.submit):
         trigger(ask, inputs=[pdf, question, model], outputs=[answer, sources])
 
-if __name__ == "__main__":
-    # Warm the default before serving, so the first visitor waits on a load and
-    # not on a gigabyte of download.
+def warm() -> None:
     download_embedder(EMBED_MODEL)
     assistant_for(CHOICES[FAST])
+
+
+if __name__ == "__main__":
+    # Serve immediately and fetch the gigabyte in the background — the platform
+    # health-checks the port long before a model could finish downloading.
+    threading.Thread(target=warm, daemon=True).start()
     demo.queue(max_size=12).launch(theme=gr.themes.Soft())
